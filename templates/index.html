@@ -31,17 +31,25 @@
 			<div class="container">
 				<div class="row">
 					<div class="col d-flex flex-row">
-						<div class="phone">+45 345 3324 56789</div>
+						{% if contact_info %}
+						<div class="phone">{{ contact_info.phone }}</div>
 						<div class="social">
 							<ul class="social_list">
-								<li class="social_list_item"><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+								{% if contact_info.pinterest %}
+								<li class="social_list_item"><a href="{{ contact_info.pinterest }}"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+								{% endif %}
+								{% if contact_info.facebook %}
+								<li class="social_list_item"><a href="{{ contact_info.facebook }}"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								{% endif %}
+								{% if contact_info.twitter %}
+								<li class="social_list_item"><a href="{{ contact_info.twitter }}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+								{% endif %}
+								{% if contact_info.instagram %}
+								<li class="social_list_item"><a href="{{ contact_info.instagram }}"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+								{% endif %}
 							</ul>
 						</div>
+						{% endif %}
 						<div class="user_box ml-auto">
 							<div class="user_box_login user_box_link"><a href="#">login</a></div>
 							<div class="user_box_register user_box_link"><a href="#">register</a></div>
@@ -130,47 +138,22 @@
 		<div class="home_slider_container">
 			
 			<div class="owl-carousel owl-theme home_slider">
-
+				{% for featured in featured_destinations %}
 				<!-- Slider Item -->
 				<div class="owl-item home_slider_item">
-					<!-- Image by https://unsplash.com/@anikindimitry -->
-					<div class="home_slider_background" style="background-image:url({% static 'images/home_slider.jpg' %})"></div>
-
+					<div class="home_slider_background" style="background-image:url({{ featured.background_image.url }})"></div>
 					<div class="home_slider_content text-center">
 						<div class="home_slider_content_inner" data-animation-in="flipInX" data-animation-out="animate-out fadeOut">
-							<h1>discover</h1>
-							<h1>the world</h1>
-							<div class="button home_slider_button"><div class="button_bcg"></div><a href="#">explore now<span></span><span></span><span></span></a></div>
+							<h1>{{ featured.title }}</h1>
+							<h1>{{ featured.subtitle }}</h1>
+							<div class="button home_slider_button">
+								<div class="button_bcg"></div>
+								<a href="{% url 'destination_detail' featured.destination.slug %}">{{ featured.button_text }}<span></span><span></span><span></span></a>
+							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- Slider Item -->
-				<div class="owl-item home_slider_item">
-					<div class="home_slider_background" style="background-image:url({% static 'images/home_slider.jpg' %})' %}"></div>
-
-					<div class="home_slider_content text-center">
-						<div class="home_slider_content_inner" data-animation-in="flipInX" data-animation-out="animate-out fadeOut">
-							<h1>discover</h1>
-							<h1>the world</h1>
-							<div class="button home_slider_button"><div class="button_bcg"></div><a href="#">explore now<span></span><span></span><span></span></a></div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Slider Item -->
-				<div class="owl-item home_slider_item">
-					<div class="home_slider_background" style="background-image:url({% static 'images/home_slider.jpg' %})"></div>
-
-					<div class="home_slider_content text-center">
-						<div class="home_slider_content_inner" data-animation-in="flipInX" data-animation-out="animate-out fadeOut">
-							<h1>discover</h1>
-							<h1>the world</h1>
-							<div class="button home_slider_button"><div class="button_bcg"></div><a href="#">explore now<span></span><span></span><span></span></a></div>
-						</div>
-					</div>
-				</div>
-
+				{% endfor %}
 			</div>
 			
 			<!-- Home Slider Nav - Prev -->
@@ -213,9 +196,11 @@
 
 			<div class="home_slider_dots">
 				<ul id="home_slider_custom_dots" class="home_slider_custom_dots">
-					<li class="home_slider_custom_dot active"><div></div>01.</li>
-					<li class="home_slider_custom_dot"><div></div>02.</li>
-					<li class="home_slider_custom_dot"><div></div>03.</li>
+					{% for featured in featured_destinations %}
+					<li class="home_slider_custom_dot {% if forloop.first %}active{% endif %}">
+						<div></div>{{ forloop.counter }}.
+					</li>
+					{% endfor %}
 				</ul>
 			</div>
 			
@@ -309,82 +294,33 @@
 				</div>
 			</div>
 			<div class="row intro_items">
-
-				<!-- Intro Item -->
-
+				{% for place in trending_places %}
 				<div class="col-lg-4 intro_col">
 					<div class="intro_item">
 						<div class="intro_item_overlay"></div>
-						<!-- Image by https://unsplash.com/@dnevozhai -->
-						<div class="intro_item_background" style="background-image:url({% static 'images/intro_1.jpg' %})"></div>
+						<div class="intro_item_background" style="background-image:url({{ place.image.url }})"></div>
 						<div class="intro_item_content d-flex flex-column align-items-center justify-content-center">
-							<div class="intro_date">May 25th - June 01st</div>
-							<div class="button intro_button"><div class="button_bcg"></div><a href="#">see more<span></span><span></span><span></span></a></div>
+							<div class="button intro_button">
+								<div class="button_bcg"></div>
+								<a href="{% url 'destination_detail' place.destination.slug %}">see more<span></span><span></span><span></span></a>
+							</div>
 							<div class="intro_center text-center">
-								<h1>Mauritius</h1>
-								<div class="intro_price">From $1450</div>
-								<div class="rating rating_4">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
+								<h1>{{ place.destination.name }}</h1>
+								<div class="intro_price">From ${{ place.price_from }}</div>
+								<div class="rating rating_{{ place.destination.rating }}">
+									{% for i in "12345"|make_list %}
+										{% if forloop.counter <= place.destination.rating %}
+											<i class="fa fa-star"></i>
+										{% else %}
+											<i class="fa fa-star-o"></i>
+										{% endif %}
+									{% endfor %}
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- Intro Item -->
-
-				<div class="col-lg-4 intro_col">
-					<div class="intro_item">
-						<div class="intro_item_overlay"></div>
-						<!-- Image by https://unsplash.com/@hellolightbulb -->
-						<div class="intro_item_background" style="background-image:url({% static 'images/intro_2.jpg' %})"></div>
-						<div class="intro_item_content d-flex flex-column align-items-center justify-content-center">
-							<div class="intro_date">May 25th - June 01st</div>
-							<div class="button intro_button"><div class="button_bcg"></div><a href="#">see more<span></span><span></span><span></span></a></div>
-							<div class="intro_center text-center">
-								<h1>Greece</h1>
-								<div class="intro_price">From $1450</div>
-								<div class="rating rating_4">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Intro Item -->
-
-				<div class="col-lg-4 intro_col">
-					<div class="intro_item">
-						<div class="intro_item_overlay"></div>
-						<!-- Image by https://unsplash.com/@willianjusten -->
-						<div class="intro_item_background" style="background-image:url({% static 'images/intro_3.jpg' %})"></div>
-						<div class="intro_item_content d-flex flex-column align-items-center justify-content-center">
-							<div class="intro_date">May 25th - June 01st</div>
-							<div class="button intro_button"><div class="button_bcg"></div><a href="#">see more<span></span><span></span><span></span></a></div>
-							<div class="intro_center text-center">
-								<h1>Scotland</h1>
-								<div class="intro_price">From $1450</div>
-								<div class="rating rating_4">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				{% endfor %}
 			</div>
 		</div>
 	</div>

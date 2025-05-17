@@ -1,10 +1,18 @@
 from django.shortcuts import render, get_object_or_404
-
-from django.shortcuts import render
-from .models import SearchCategory, Destination, Booking
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .models import (
+    SearchCategory, 
+    Destination, 
+    Booking, 
+    FeaturedDestination,
+    SpecialOffer,
+    TrendingPlace,
+    Testimonial,
+    BlogPost,
+    ContactInfo
+)
 import datetime
 
 
@@ -20,7 +28,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         
         # Get all search categories ordered by their defined order
-        context['search_categories'] = SearchCategory.objects.all()
+        context['search_categories'] = SearchCategory.objects.filter(is_active=True)
         
         # Get all destinations for the autocomplete
         context['destinations'] = Destination.objects.all()
@@ -30,6 +38,30 @@ class IndexView(TemplateView):
         
         # Range for children dropdown (0-6)
         context['children_range'] = range(0, 7)
+
+        # Featured destinations for slider
+        context['featured_destinations'] = FeaturedDestination.objects.filter(is_active=True)
+
+        # Special offers
+        context['special_offers'] = SpecialOffer.objects.filter(
+            is_active=True,
+            end_date__gte=datetime.date.today()
+        )[:3]  # Show only 3 offers
+
+        # Trending places
+        context['trending_places'] = TrendingPlace.objects.filter(is_active=True)[:8]
+
+        # Testimonials
+        context['testimonials'] = Testimonial.objects.filter(is_active=True)[:6]
+
+        # Recent blog posts
+        context['recent_blog_posts'] = BlogPost.objects.filter(is_active=True)[:3]
+
+        # Contact information
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
         
         return context
 
@@ -85,3 +117,50 @@ def booking_confirmation(request, booking_id):
     return render(request, 'booking_confirmation.html', {
         'booking': booking
     })
+
+class OffersView(ListView):
+    template_name = 'offers.html'
+    model = SpecialOffer
+    context_object_name = 'special_offers'
+
+    def get_queryset(self):
+        return SpecialOffer.objects.filter(
+            is_active=True,
+            end_date__gte=datetime.date.today()
+        ).select_related('destination')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add contact info for the header
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+        return context
+
+class DestinationDetailView(DetailView):
+    model = Destination
+    template_name = 'destination_detail.html'
+    context_object_name = 'destination'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        destination = self.get_object()
+        
+        # Get special offers for this destination
+        context['special_offers'] = SpecialOffer.objects.filter(
+            destination=destination,
+            is_active=True,
+            end_date__gte=datetime.date.today()
+        )
+
+        # Get contact info for the header
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+
+        return context
+
+# Update the URL pattern to use this class-based view
+destination_detail = DestinationDetailView.as_view()
