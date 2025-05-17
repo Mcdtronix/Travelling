@@ -88,4 +88,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Template design by Colorlib
 - Icons from Font Awesome
-- Images from Unsplash 
+- Images from Unsplash
