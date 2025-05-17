@@ -1,4 +1,4 @@
-# Travelix - Travel Booking Website
+# Travelling - Travel Booking Website
 
 A modern travel booking website built with Django that allows users to search and book various travel services including hotels, flights, car rentals, and cruises.
 
@@ -23,8 +23,8 @@ A modern travel booking website built with Django that allows users to search an
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Mcdtronix/Travelix.git
-cd Travelix
+git clone https://github.com/Mcdtronix/Travelling.git
+cd Travelling
 ```
 
 2. Create a virtual environment and activate it:
