@@ -62,17 +62,17 @@ class TrendingPlaceAdmin(admin.ModelAdmin):
 
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ('author_name', 'rating', 'date', 'is_active')
+    list_display = ('client_name', 'rating', 'date', 'is_active')
     list_filter = ('rating', 'is_active', 'date')
-    search_fields = ('author_name', 'content')
+    search_fields = ('client_name', 'content')
     date_hierarchy = 'date'
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'publication_date', 'is_active')
-    list_filter = ('is_active', 'publication_date', 'author')
+    list_display = ('title', 'author', 'publish_date', 'is_active')
+    list_filter = ('is_active', 'publish_date', 'author')
     search_fields = ('title', 'content', 'author')
-    date_hierarchy = 'publication_date'
+    date_hierarchy = 'publish_date'
     prepopulated_fields = {'slug': ('title',)}
 
 @admin.register(ContactInfo)

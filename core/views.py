@@ -164,3 +164,41 @@ class DestinationDetailView(DetailView):
 
 # Update the URL pattern to use this class-based view
 destination_detail = DestinationDetailView.as_view()
+
+class AboutView(TemplateView):
+    template_name = 'about.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+        return context
+
+class BlogView(ListView):
+    template_name = 'blog.html'
+    model = BlogPost
+    context_object_name = 'blog_posts'
+    
+    def get_queryset(self):
+        return BlogPost.objects.filter(is_active=True).order_by('-publish_date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+        return context
+
+class ContactView(TemplateView):
+    template_name = 'contact.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+        return context
