@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, ListView, DetailView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from django.contrib import messages
 from .models import (
     SearchCategory, 
     Destination, 
@@ -11,7 +12,10 @@ from .models import (
     TrendingPlace,
     Testimonial,
     BlogPost,
-    ContactInfo
+    ContactInfo,
+    ContactFormSubmission,
+    Activity,
+    Listing
 )
 import datetime
 
@@ -50,6 +54,11 @@ class IndexView(TemplateView):
 
         # Trending places
         context['trending_places'] = TrendingPlace.objects.filter(is_active=True)[:8]
+
+        # Activities for slider - ordered by order field and limited to 6
+        context['activities'] = Activity.objects.filter(
+            is_active=True
+        ).order_by('order', '-rating').distinct()[:6]
 
         # Testimonials
         context['testimonials'] = Testimonial.objects.filter(is_active=True)[:6]
@@ -202,3 +211,87 @@ class ContactView(TemplateView):
         except ContactInfo.DoesNotExist:
             context['contact_info'] = None
         return context
+
+class ElementsView(TemplateView):
+    template_name = 'elements.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+        return context
+
+class ActivityView(ListView):
+    template_name = 'activities.html'
+    model = Activity
+    context_object_name = 'activities'
+    
+    def get_queryset(self):
+        return Activity.objects.filter(is_active=True).order_by('order')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['contact_info'] = ContactInfo.objects.first()
+        except ContactInfo.DoesNotExist:
+            context['contact_info'] = None
+        return context
+
+def contact_form_submit(request):
+    """Handle contact form submissions"""
+    if request.method == 'POST':
+        try:
+            # Get form data
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            subject = request.POST.get('subject')
+            message = request.POST.get('message')
+
+            # Create new submission
+            submission = ContactFormSubmission.objects.create(
+                name=name,
+                email=email,
+                subject=subject,
+                message=message
+            )
+
+            # Return success response
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Thank you for your message. We will get back to you soon!'
+            })
+        except Exception as e:
+            # Return error response
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Sorry, there was an error sending your message. Please try again.'
+            })
+    
+    # If not POST request, redirect to home
+    return redirect('index')
+
+class ListingDetailView(TemplateView):
+    template_name = 'listing.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = kwargs.get('slug')
+        
+        # Get the listing details
+        listing = get_object_or_404(Listing, slug=slug)
+        context['listing'] = listing
+        
+        # Get related listings
+        context['related_listings'] = Listing.objects.filter(
+            destination=listing.destination
+        ).exclude(id=listing.id)[:3]
+        
+        # Get destination details
+        context['destination'] = listing.destination
+        
+        # Get available dates
+        context['available_dates'] = listing.get_available_dates()
+        
+        return context 

@@ -50,10 +50,7 @@
 							</ul>
 						</div>
 						{% endif %}
-						<div class="user_box ml-auto">
-							<div class="user_box_login user_box_link"><a href="#">login</a></div>
-							<div class="user_box_register user_box_link"><a href="#">register</a></div>
-						</div>
+
 					</div>
 				</div>
 			</div>		
@@ -148,7 +145,7 @@
 							<h1>{{ featured.subtitle }}</h1>
 							<div class="button home_slider_button">
 								<div class="button_bcg"></div>
-								<a href="{% url 'destination_detail' featured.destination.slug %}">{{ featured.button_text }}<span></span><span></span><span></span></a>
+								<a href="{% url 'elements' featured.destination.slug %}">{{ featured.button_text }}<span></span><span></span><span></span></a>
 							</div>
 						</div>
 					</div>
@@ -208,74 +205,6 @@
 
 	</div>
 
-
-
-	<!-- Search -->
-	<div class="search">
-		<!-- Search Contents -->
-		<div class="container fill_height">
-			<div class="row fill_height">
-				<div class="col fill_height">
-					
-					<!-- Search Tabs -->
-					<div class="search_tabs_container">
-						<div class="search_tabs d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
-							{% for category in search_categories %}
-								<div class="search_tab {% if forloop.first %}active{% endif %} d-flex flex-row align-items-center justify-content-lg-center justify-content-start">
-									<img src="{% static category.icon %}" alt="{{ category.name }}">
-									<span>{{ category.name }}</span>
-								</div>
-							{% endfor %}
-						</div>        
-					</div>
-
-					<!-- Search Panels -->
-					{% for category in search_categories %}
-						<div class="search_panel {% if forloop.first %}active{% endif %}">
-							<form action="{% url 'search_results' category.id %}" method="post" id="search_form_{{ forloop.counter }}" class="search_panel_content d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-lg-between justify-content-start">
-								{% csrf_token %}
-								<div class="search_item">
-									<div>destination</div>
-									<input type="text" name="destination" class="destination search_input" required="required" list="destinations_list">
-									<datalist id="destinations_list">
-										{% for dest in destinations %}
-											<option value="{{ dest.name }}, {{ dest.country }}">
-										{% endfor %}
-									</datalist>
-								</div>
-								<div class="search_item">
-									<div>check in</div>
-									<input type="date" name="check_in" class="check_in search_input" required="required">
-								</div>
-								<div class="search_item">
-									<div>check out</div>
-									<input type="date" name="check_out" class="check_out search_input" required="required">
-								</div>
-								<div class="search_item">
-									<div>adults</div>
-									<select name="adults" class="dropdown_item_select search_input">
-										{% for i in adults_range %}
-											<option value="{{ i }}">{{ i }}</option>
-										{% endfor %}
-									</select>
-								</div>
-								<div class="search_item">
-									<div>children</div>
-									<select name="children" class="dropdown_item_select search_input">
-										{% for i in children_range %}
-											<option value="{{ i }}">{{ i }}</option>
-										{% endfor %}
-									</select>
-								</div>
-								<button class="button search_button">search<span></span><span></span><span></span></button>
-							</form>
-						</div>
-					{% endfor %}
-					
-				</div>
-			</div>
-		</div>        
-	</div>
 
 <!-- Intro -->
 	
@@ -481,135 +410,59 @@
 		</div>
 	</div>
 
-	<!-- Testimonials -->
+	<!-- Activities -->
 
 	<div class="testimonials">
 		<div class="test_border"></div>
 		<div class="container">
 			<div class="row">
 				<div class="col text-center">
-					<h2 class="section_title">what our clients say about us</h2>
+					<h2 class="section_title">Popular Activities</h2>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
 					
-					<!-- Testimonials Slider -->
+					<!-- Activities Slider -->
 
 					<div class="test_slider_container">
 						<div class="owl-carousel owl-theme test_slider">
 
-							<!-- Testimonial Item -->
+							{% for activity in activities %}
+							<!-- Activity Item -->
 							<div class="owl-item">
 								<div class="test_item">
-									<div class="test_image"><img src="{% static 'images/test_1.jpg' %}" alt="https://unsplash.com/@anniegray"></div>
-									<div class="test_icon"><img src="{% static 'images/backpack.png' %}" alt=""></div>
+									<div class="test_image"><img src="{{ activity.image.url }}" alt="{{ activity.title }}"></div>
+									<div class="test_icon"><img src="{% static 'images/compass.png' %}" alt=""></div>
 									<div class="test_content_container">
 										<div class="test_content">
 											<div class="test_item_info">
-												<div class="test_name">carla smith</div>
-												<div class="test_date">May 24, 2017</div>
+												<div class="test_name">{{ activity.title }}</div>
+												<div class="test_date">{{ activity.duration }}</div>
 											</div>
-											<div class="test_quote_title">" Best holliday ever "</div>
-											<p class="test_quote_text">Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec.</p>
+											<div class="test_quote_title">${{ activity.price }}</div>
+											<p class="test_quote_text">{{ activity.description|truncatewords:20 }}</p>
+											<div class="rating_r rating_r_{{ activity.rating }}">
+												{% for i in "12345"|make_list %}
+													{% if forloop.counter <= activity.rating %}
+														<i class="fa fa-star"></i>
+													{% else %}
+														<i class="fa fa-star-o"></i>
+													{% endif %}
+												{% endfor %}
+											</div>
+											<div class="test_location">
+												<i class="fa fa-map-marker"></i> {{ activity.location }}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-
-							<!-- Testimonial Item -->
-							<div class="owl-item">
-								<div class="test_item">
-									<div class="test_image"><img src="{% static 'images/test_2.jpg' %}" alt="https://unsplash.com/@tschax"></div>
-									<div class="test_icon"><img src="{% static 'images/island_t.png' %}" alt=""></div>
-									<div class="test_content_container">
-										<div class="test_content">
-											<div class="test_item_info">
-												<div class="test_name">carla smith</div>
-												<div class="test_date">May 24, 2017</div>
-											</div>
-											<div class="test_quote_title">" Best holliday ever "</div>
-											<p class="test_quote_text">Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec.</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Testimonial Item -->
-							<div class="owl-item">
-								<div class="test_item">
-									<div class="test_image"><img src="{% static 'images/test_3.jpg' %}" alt="https://unsplash.com/@seefromthesky"></div>
-									<div class="test_icon"><img src="{% static 'images/kayak.png' %}" alt=""></div>
-									<div class="test_content_container">
-										<div class="test_content">
-											<div class="test_item_info">
-												<div class="test_name">carla smith</div>
-												<div class="test_date">May 24, 2017</div>
-											</div>
-											<div class="test_quote_title">" Best holliday ever "</div>
-											<p class="test_quote_text">Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec.</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Testimonial Item -->
-							<div class="owl-item">
-								<div class="test_item">
-									<div class="test_image"><img src="{% static 'images/test_2.jpg' %}" alt=""></div>
-									<div class="test_icon"><img src="{% static 'images/island_t.png' %}" alt=""></div>
-									<div class="test_content_container">
-										<div class="test_content">
-											<div class="test_item_info">
-												<div class="test_name">carla smith</div>
-												<div class="test_date">May 24, 2017</div>
-											</div>
-											<div class="test_quote_title">" Best holliday ever "</div>
-											<p class="test_quote_text">Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec.</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Testimonial Item -->
-							<div class="owl-item">
-								<div class="test_item">
-									<div class="test_image"><img src="{% static 'images/test_1.jpg' %}" alt=""></div>
-									<div class="test_icon"><img src="{% static 'images/backpack.png' %}" alt=""></div>
-									<div class="test_content_container">
-										<div class="test_content">
-											<div class="test_item_info">
-												<div class="test_name">carla smith</div>
-												<div class="test_date">May 24, 2017</div>
-											</div>
-											<div class="test_quote_title">" Best holliday ever "</div>
-											<p class="test_quote_text">Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec.</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Testimonial Item -->
-							<div class="owl-item">
-								<div class="test_item">
-									<div class="test_image"><img src="{% static 'images/test_3.jpg' %}" alt=""></div>
-									<div class="test_icon"><img src="{% static 'images/kayak.png' %}" alt=""></div>
-									<div class="test_content_container">
-										<div class="test_content">
-											<div class="test_item_info">
-												<div class="test_name">carla smith</div>
-												<div class="test_date">May 24, 2017</div>
-											</div>
-											<div class="test_quote_title">" Best holliday ever "</div>
-											<p class="test_quote_text">Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec.</p>
-										</div>
-									</div>
-								</div>
-							</div>
+							{% endfor %}
 
 						</div>
 
-						<!-- Testimonials Slider Nav - Prev -->
+						<!-- Activities Slider Nav - Prev -->
 						<div class="test_slider_nav test_slider_prev">
 							<svg version="1.1" id="Layer_6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 								width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
@@ -627,7 +480,7 @@
 							</svg>
 						</div>
 						
-						<!-- Testimonials Slider Nav - Next -->
+						<!-- Activities Slider Nav - Next -->
 						<div class="test_slider_nav test_slider_next">
 							<svg version="1.1" id="Layer_7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 							width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
@@ -691,9 +544,10 @@
 				<div class="col-lg-7">
 					<div class="contact_form_container">
 						<div class="contact_title">get in touch</div>
-						<form action="#" id="contact_form" class="contact_form">
+						<form id="contact_form" class="contact_form">
+							{% csrf_token %}
 							<input type="text" id="contact_form_name" class="contact_form_name input_field" placeholder="Name" required="required" data-error="Name is required.">
-							<input type="text" id="contact_form_email" class="contact_form_email input_field" placeholder="E-mail" required="required" data-error="Email is required.">
+							<input type="email" id="contact_form_email" class="contact_form_email input_field" placeholder="E-mail" required="required" data-error="Email is required.">
 							<input type="text" id="contact_form_subject" class="contact_form_subject input_field" placeholder="Subject" required="required" data-error="Subject is required.">
 							<textarea id="contact_form_message" class="text_field contact_form_message" name="message" rows="4" placeholder="Message" required="required" data-error="Please, write us a message."></textarea>
 							<button type="submit" id="form_submit_button" class="form_submit_button button">send message<span></span><span></span><span></span></button>

@@ -9,7 +9,10 @@ from .models import (
     TrendingPlace,
     Testimonial,
     BlogPost,
-    ContactInfo
+    ContactInfo,
+    ContactFormSubmission,
+    Activity,
+    Listing
 )
 
 @admin.register(SearchCategory)
@@ -84,3 +87,30 @@ class ContactInfoAdmin(admin.ModelAdmin):
         if self.model.objects.exists():
             return False
         return True
+
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ('title', 'location', 'price', 'duration', 'rating', 'is_active', 'order')
+    list_filter = ('is_active', 'rating', 'location')
+    search_fields = ('title', 'description', 'location')
+    list_editable = ('is_active', 'order', 'price', 'rating')
+    ordering = ('order', '-rating')
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'image')
+        }),
+        ('Details', {
+            'fields': ('price', 'duration', 'location', 'rating')
+        }),
+        ('Settings', {
+            'fields': ('is_active', 'order')
+        }),
+    )
+
+@admin.register(Listing)
+class ListingAdmin(admin.ModelAdmin):
+    list_display = ('title', 'destination', 'price', 'rating', 'is_active')
+    list_filter = ('is_active', 'destination', 'rating')
+    search_fields = ('title', 'description', 'destination__name')
+    prepopulated_fields = {'slug': ('title',)}
+    raw_id_fields = ('destination',)

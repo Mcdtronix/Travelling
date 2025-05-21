@@ -28,17 +28,25 @@
 			<div class="container">
 				<div class="row">
 					<div class="col d-flex flex-row">
-						<div class="phone">+45 345 3324 56789</div>
+						{% if contact_info %}
+						<div class="phone">{{ contact_info.phone }}</div>
 						<div class="social">
 							<ul class="social_list">
-								<li class="social_list_item"><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a></li>
-								<li class="social_list_item"><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+								{% if contact_info.pinterest %}
+								<li class="social_list_item"><a href="{{ contact_info.pinterest }}"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+								{% endif %}
+								{% if contact_info.facebook %}
+								<li class="social_list_item"><a href="{{ contact_info.facebook }}"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								{% endif %}
+								{% if contact_info.twitter %}
+								<li class="social_list_item"><a href="{{ contact_info.twitter }}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+								{% endif %}
+								{% if contact_info.instagram %}
+								<li class="social_list_item"><a href="{{ contact_info.instagram }}"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+								{% endif %}
 							</ul>
 						</div>
+						{% endif %}
 						<div class="user_box ml-auto">
 							<div class="user_box_login user_box_link"><a href="#">login</a></div>
 							<div class="user_box_register user_box_link"><a href="#">register</a></div>
@@ -138,79 +146,30 @@
 				<div class="col-lg-8">
 					
 					<div class="blog_post_container">
-
+						{% for post in blog_posts %}
 						<!-- Blog Post -->
-						
 						<div class="blog_post">
 							<div class="blog_post_image">
-								<img src="{% static 'images/blog_1.jpg' %}" alt="https://unsplash.com/@anniespratt">
+								<img src="{{ post.image.url }}" alt="{{ post.title }}">
 								<div class="blog_post_date d-flex flex-column align-items-center justify-content-center">
-									<div class="blog_post_day">01</div>
-									<div class="blog_post_month">Dec, 2017</div>
+									<div class="blog_post_day">{{ post.publish_date.day }}</div>
+									<div class="blog_post_month">{{ post.publish_date|date:"M, Y" }}</div>
 								</div>
 							</div>
 							<div class="blog_post_meta">
 								<ul>
-									<li class="blog_post_meta_item"><a href="">by Lore Papp</a></li>
-									<li class="blog_post_meta_item"><a href="">Uncategorized</a></li>
-									<li class="blog_post_meta_item"><a href="">3 Comments</a></li>
+									<li class="blog_post_meta_item"><a href="#">{{ post.author }}</a></li>
+									<li class="blog_post_meta_item"><a href="#">Uncategorized</a></li>
+									<li class="blog_post_meta_item"><a href="#">0 Comments</a></li>
 								</ul>
 							</div>
-							<div class="blog_post_title"><a href="#">Try these new dream destinations</a></div>
+							<div class="blog_post_title"><a href="#">{{ post.title }}</a></div>
 							<div class="blog_post_text">
-								<p>Aenean in lacus ligula. Phasellus euismod gravida eros. Aenean nec ipsum aliquet, pharetra magna id, interdum sapien. Etiam id lorem eu nisl pellentesque semper. Nullam tincidunt metus placerat, suscipit leo ut, tempus nulla. Fusce at eleifend tellus. Ut eleifend dui nunc, non fermentum qua.</p>
+								<p>{{ post.content|truncatewords:30 }}</p>
 							</div>
 							<div class="blog_post_link"><a href="#">read more</a></div>
 						</div>
-
-						<!-- Blog Post -->
-						
-						<div class="blog_post">
-							<div class="blog_post_image">
-								<img src="{% static 'images/blog_2.jpg' %}" alt="https://unsplash.com/@tschax">
-								<div class="blog_post_date d-flex flex-column align-items-center justify-content-center">
-									<div class="blog_post_day">01</div>
-									<div class="blog_post_month">Dec, 2017</div>
-								</div>
-							</div>
-							<div class="blog_post_meta">
-								<ul>
-									<li class="blog_post_meta_item"><a href="">by Lore Papp</a></li>
-									<li class="blog_post_meta_item"><a href="">Uncategorized</a></li>
-									<li class="blog_post_meta_item"><a href="">3 Comments</a></li>
-								</ul>
-							</div>
-							<div class="blog_post_title"><a href="#">Try these new dream destinations</a></div>
-							<div class="blog_post_text">
-								<p>Aenean in lacus ligula. Phasellus euismod gravida eros. Aenean nec ipsum aliquet, pharetra magna id, interdum sapien. Etiam id lorem eu nisl pellentesque semper. Nullam tincidunt metus placerat, suscipit leo ut, tempus nulla. Fusce at eleifend tellus. Ut eleifend dui nunc, non fermentum qua.</p>
-							</div>
-							<div class="blog_post_link"><a href="#">read more</a></div>
-						</div>
-
-						<!-- Blog Post -->
-						
-						<div class="blog_post">
-							<div class="blog_post_image">
-								<img src="{% static 'images/blog_3.jpg' %}" alt="https://unsplash.com/@stilclassics">
-								<div class="blog_post_date d-flex flex-column align-items-center justify-content-center">
-									<div class="blog_post_day">01</div>
-									<div class="blog_post_month">Dec, 2017</div>
-								</div>
-							</div>
-							<div class="blog_post_meta">
-								<ul>
-									<li class="blog_post_meta_item"><a href="">by Lore Papp</a></li>
-									<li class="blog_post_meta_item"><a href="">Uncategorized</a></li>
-									<li class="blog_post_meta_item"><a href="">3 Comments</a></li>
-								</ul>
-							</div>
-							<div class="blog_post_title"><a href="#">Try these new dream destinations</a></div>
-							<div class="blog_post_text">
-								<p>Aenean in lacus ligula. Phasellus euismod gravida eros. Aenean nec ipsum aliquet, pharetra magna id, interdum sapien. Etiam id lorem eu nisl pellentesque semper. Nullam tincidunt metus placerat, suscipit leo ut, tempus nulla. Fusce at eleifend tellus. Ut eleifend dui nunc, non fermentum qua.</p>
-							</div>
-							<div class="blog_post_link"><a href="#">read more</a></div>
-						</div>
-
+						{% endfor %}
 					</div>
 						
 					<div class="blog_navigation">

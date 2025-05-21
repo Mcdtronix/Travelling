@@ -55,6 +55,7 @@ class Booking(models.Model):
 class FeaturedDestination(models.Model):
     """Model for featured destinations in the home slider"""
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    listing = models.ForeignKey('Listing', on_delete=models.SET_NULL, null=True, blank=True, related_name='featured_destinations')
     title = models.CharField(max_length=200)
     subtitle = models.CharField(max_length=200)
     background_image = models.ImageField(upload_to='featured/')
@@ -115,6 +116,28 @@ class Testimonial(models.Model):
     def __str__(self):
         return f"Testimonial by {self.client_name}"
 
+class Activity(models.Model):
+    """Model for travel activities"""
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    image = models.ImageField(upload_to='activities/')
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    duration = models.CharField(max_length=50)  # e.g., "2 hours", "Full day"
+    location = models.CharField(max_length=200)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        default=5
+    )
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)  # For ordering in the slider
+
+    class Meta:
+        verbose_name_plural = "Activities"
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
 class BlogPost(models.Model):
     """Model for blog posts"""
     title = models.CharField(max_length=200)
@@ -153,3 +176,46 @@ class ContactInfo(models.Model):
 
     def __str__(self):
         return "Contact Information"
+
+class ContactFormSubmission(models.Model):
+    """Model for contact form submissions"""
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-submitted_at']
+
+    def __str__(self):
+        return f"Message from {self.name} - {self.subject}"
+
+class Listing(models.Model):
+    """Model for property listings"""
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='listings/')
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        default=5
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def get_available_dates(self):
+        # This is a placeholder method - implement actual availability logic
+        return []
+
+    def __str__(self):
+        return self.title
