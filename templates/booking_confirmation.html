@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Booking Confirmed!</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Booking Details</h4>
+                    <div class="booking-details">
+                        <p><strong>Category:</strong> {{ booking.category.name }}</p>
+                        <p><strong>Destination:</strong> {{ booking.destination.name }}, {{ booking.destination.country }}</p>
+                        <p><strong>Check-in Date:</strong> {{ booking.check_in_date }}</p>
+                        <p><strong>Check-out Date:</strong> {{ booking.check_out_date }}</p>
+                        <p><strong>Number of Adults:</strong> {{ booking.adults }}</p>
+                        <p><strong>Number of Children:</strong> {{ booking.children }}</p>
+                        <p><strong>Booking Date:</strong> {{ booking.created_at }}</p>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
