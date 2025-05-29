@@ -1,21 +1,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
-# Create your models here.
-class SearchCategory(models.Model):
-    """Model for search categories (hotels, car rentals, flights, etc.)"""
-    name = models.CharField(max_length=50)
-    icon = models.CharField(max_length=100, null=True, blank=True )  # Path to the icon image
-    is_active = models.BooleanField(default=False)
-    order = models.IntegerField(default=0)  # For ordering tabs
-    
-    class Meta:
-        verbose_name_plural = "Search Categories"
-        ordering = ['order']
-        
-    def __str__(self):
-        return self.name
+
 
 class Destination(models.Model):
     """Model for travel destinations"""
@@ -30,27 +19,67 @@ class Destination(models.Model):
     )
     base_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     slug = models.SlugField(unique=True, blank=True)
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.name}-{self.country}")
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return f"{self.name}, {self.country}"
 
 class Booking(models.Model):
     """Model for bookings across all categories"""
-    category = models.ForeignKey(SearchCategory, on_delete=models.CASCADE)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    BOOKING_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    name = models.CharField(max_length=200, default='Name')
+    email = models.EmailField(max_length=254, null=True, blank=True)
+    contact = models.CharField(max_length=20, null=True, blank=True)  # Changed to CharField for better phone validation
+    destination = models.ForeignKey('Destination', on_delete=models.CASCADE)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
-    adults = models.PositiveIntegerField(default=1)
+    adults = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
     children = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES, default='pending')
+    special_requests = models.TextField(blank=True, null=True, help_text="Any special requirements")
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Booking'
+        verbose_name_plural = 'Bookings'
+
+    def clean(self):
+        """Custom validation for booking dates"""
+        if self.check_in_date and self.check_out_date:
+            if self.check_in_date < timezone.now().date():
+                raise ValidationError("Check-in date cannot be in the past.")
+            if self.check_out_date <= self.check_in_date:
+                raise ValidationError("Check-out date must be after check-in date.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    @property
+    def total_guests(self):
+        return self.adults + self.children
+
+    @property
+    def duration_days(self):
+        if self.check_in_date and self.check_out_date:
+            return (self.check_out_date - self.check_in_date).days
+        return 0
+
     def __str__(self):
-        return f"{self.category.name} booking for {self.destination} ({self.check_in_date} to {self.check_out_date})"
+        return f"{self.name} - {self.destination} ({self.check_in_date} to {self.check_out_date})"
+
+
 
 class FeaturedDestination(models.Model):
     """Model for featured destinations in the home slider"""
@@ -148,7 +177,7 @@ class BlogPost(models.Model):
     publish_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)

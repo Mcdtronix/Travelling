@@ -20,7 +20,7 @@
 <body>
 
 <div class="super_container">
-	
+
 	<!-- Header -->
 
 	<header class="header">
@@ -50,10 +50,13 @@
 							</ul>
 						</div>
 						{% endif %}
-
+						<!--<div class="user_box ml-auto">-->
+						<!--	<div class="user_box_login user_box_link"><a href="#">login</a></div>-->
+						<!--	<div class="user_box_register user_box_link"><a href="#">register</a></div>-->
+						<!--</div>-->
 					</div>
 				</div>
-			</div>		
+			</div>
 		</div>
 
 		<!-- Main Navigation -->
@@ -70,7 +73,6 @@
 								<li class="main_nav_item"><a href="{% url 'index' %}">home</a></li>
 								<li class="main_nav_item"><a href="{% url 'about' %}">about us</a></li>
 								<li class="main_nav_item"><a href="{% url 'offers' %}">offers</a></li>
-								<li class="main_nav_item"><a href="{% url 'blog' %}">news</a></li>
 								<li class="main_nav_item"><a href="{% url 'contact' %}">contact</a></li>
 							</ul>
 						</div>
@@ -107,7 +109,7 @@
 						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</nav>
 
 	</header>
@@ -120,20 +122,109 @@
 				<li class="menu_item"><a href="{% url 'index' %}">home</a></li>
 				<li class="menu_item"><a href="{% url 'about' %}">about us</a></li>
 				<li class="menu_item"><a href="{% url 'offers' %}">offers</a></li>
-				<li class="menu_item"><a href="{% url 'blog' %}">news</a></li>
 				<li class="menu_item"><a href="{% url 'contact' %}">contact</a></li>
 			</ul>
 		</div>
 	</div>
 
+
+	<!-- Booking Modal -->
+	<div class="modal fade booking-modal" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="bookingModalLabel">
+						<i class="fa fa-calendar-check-o"></i> Book Your Dream Trip
+					</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="bookingForm" class="booking-form" method="post" action="{% url 'create_booking' %}">
+						{% csrf_token %}
+						<div id="booking-messages"></div>
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.name.id_for_label }}">Full Name *</label>
+								{{ booking_form.name }}
+								<div class="error-message" id="name-error"></div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.email.id_for_label }}">Email Address *</label>
+								{{ booking_form.email }}
+								<div class="error-message" id="email-error"></div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.contact.id_for_label }}">Phone Number *</label>
+								{{ booking_form.contact }}
+								<div class="error-message" id="contact-error"></div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.destination.id_for_label }}">Destination *</label>
+								{{ booking_form.destination }}
+								<div class="error-message" id="destination-error"></div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.check_in_date.id_for_label }}">Check-in Date *</label>
+								{{ booking_form.check_in_date }}
+								<div class="error-message" id="check_in_date-error"></div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.check_out_date.id_for_label }}">Check-out Date *</label>
+								{{ booking_form.check_out_date }}
+								<div class="error-message" id="check_out_date-error"></div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.adults.id_for_label }}">Number of Adults *</label>
+								{{ booking_form.adults }}
+								<div class="error-message" id="adults-error"></div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="{{ booking_form.children.id_for_label }}">Number of Children</label>
+								{{ booking_form.children }}
+								<div class="error-message" id="children-error"></div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group col-12">
+								<label for="{{ booking_form.special_requests.id_for_label }}">Special Requests</label>
+								{{ booking_form.special_requests }}
+								<div class="error-message" id="special_requests-error"></div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group col-12 text-center">
+								<button type="submit" class="btn btn-primary">Submit Booking</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<!-- Home -->
 
 	<div class="home">
-		
+
 		<!-- Home Slider -->
 
 		<div class="home_slider_container">
-			
+
 			<div class="owl-carousel owl-theme home_slider">
 				{% for featured in featured_destinations %}
 				<!-- Slider Item -->
@@ -145,69 +236,20 @@
 							<h1>{{ featured.subtitle }}</h1>
 							<div class="button home_slider_button">
 								<div class="button_bcg"></div>
-								<a href="{% url 'elements' %}">{{ featured.button_text }}<span></span><span></span><span></span></a>
+								<a href="{% url 'offers' %}">Explore<span></span><span></span><span></span></a>
 							</div>
 						</div>
 					</div>
 				</div>
 				{% endfor %}
 			</div>
-			
-			<!-- Home Slider Nav - Prev -->
-			<div class="home_slider_nav home_slider_prev">
-				<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-					width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
-					<defs>
-						<linearGradient id='home_grad_prev'>
-							<stop offset='0%' stop-color='#fa9e1b'/>
-							<stop offset='100%' stop-color='#8d4fff'/>
-						</linearGradient>
-					</defs>
-					<path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
-					M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
-					C22.545,2,26,5.541,26,9.909V23.091z"/>
-					<polygon class="nav_arrow" fill="#F3F6F9" points="15.044,22.222 16.377,20.888 12.374,16.885 16.377,12.882 15.044,11.55 9.708,16.885 11.04,18.219 
-					11.042,18.219 "/>
-				</svg>
-			</div>
-			
-			<!-- Home Slider Nav - Next -->
-			<div class="home_slider_nav home_slider_next">
-				<svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-				width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
-					<defs>
-						<linearGradient id='home_grad_next'>
-							<stop offset='0%' stop-color='#fa9e1b'/>
-							<stop offset='100%' stop-color='#8d4fff'/>
-						</linearGradient>
-					</defs>
-				<path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
-				M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
-				C22.545,2,26,5.541,26,9.909V23.091z"/>
-				<polygon class="nav_arrow" fill="#F3F6F9" points="13.044,11.551 11.71,12.885 15.714,16.888 11.71,20.891 13.044,22.224 18.379,16.888 17.048,15.554 
-				17.046,15.554 "/>
-				</svg>
-			</div>
-
-			<!-- Home Slider Dots -->
-
-			<div class="home_slider_dots">
-				<ul id="home_slider_custom_dots" class="home_slider_custom_dots">
-					{% for featured in featured_destinations %}
-					<li class="home_slider_custom_dot {% if forloop.first %}active{% endif %}">
-						<div></div>{{ forloop.counter }}.
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
-			
 		</div>
 
 	</div>
 
 
 <!-- Intro -->
-	
+
 	<div class="intro">
 		<div class="container">
 			<div class="row">
@@ -218,7 +260,7 @@
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
 					<div class="intro_text text-center">
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec. </p>
+						<p>I'm your nature-loving, vanilla-hearted girl with a suitcase full of maps, dreams, and wanderlust. This space is your guide to soulful journeys, hidden wonders, and peaceful paths. Let's chase sunsets, find wildflowers, and write beautiful stories in every corner of the world—together.. </p>
 					</div>
 				</div>
 			</div>
@@ -231,7 +273,7 @@
 						<div class="intro_item_content d-flex flex-column align-items-center justify-content-center">
 							<div class="button intro_button">
 								<div class="button_bcg"></div>
-								<a href="{% url 'destination_detail' place.destination.slug %}">see more<span></span><span></span><span></span></a>
+								<a href="{% url 'offers' %}">see more<span></span><span></span><span></span></a>
 							</div>
 							<div class="intro_center text-center">
 								<h1>{{ place.destination.name }}</h1>
@@ -259,7 +301,7 @@
 	<div class="cta">
 		<!-- Image by https://unsplash.com/@thanni -->
 		<div class="cta_background" style="background-image:url({% static 'images/cta.jpg' %})"></div>
-		
+
 		<div class="container">
 			<div class="row">
 				<div class="col">
@@ -279,82 +321,16 @@
 									<i></i>
 									<i></i>
 								</div>
-								<p class="cta_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec. Proin bibendum, augue faucibus tincidunt ultrices, tortor augue gravida lectus, et efficitur enim justo vel ligula.</p>
+								<p class="cta_text">Embrace the call of the wild, fearless adventurer! Let each path be a doorway to new stories, where untrodden trails lead to breathtaking views and secret hideaways. Here, adventure isn't just a destination—it's the journey of discovering your inner explorer and the beauty that lies just beyond the horizon..</p>
 								<div class="button cta_button"><div class="button_bcg"></div><a href="#">book now<span></span><span></span><span></span></a></div>
 							</div>
-
-							<!-- CTA Slider Item -->
-							<div class="owl-item cta_item text-center">
-								<div class="cta_title">maldives deluxe package</div>
-								<div class="rating_r rating_r_4">
-									<i></i>
-									<i></i>
-									<i></i>
-									<i></i>
-									<i></i>
-								</div>
-								<p class="cta_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec. Proin bibendum, augue faucibus tincidunt ultrices, tortor augue gravida lectus, et efficitur enim justo vel ligula.</p>
-								<div class="button cta_button"><div class="button_bcg"></div><a href="#">book now<span></span><span></span><span></span></a></div>
-							</div>
-
-							<!-- CTA Slider Item -->
-							<div class="owl-item cta_item text-center">
-								<div class="cta_title">maldives deluxe package</div>
-								<div class="rating_r rating_r_4">
-									<i></i>
-									<i></i>
-									<i></i>
-									<i></i>
-									<i></i>
-								</div>
-								<p class="cta_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu convallis tortor. Suspendisse potenti. In faucibus massa arcu, vitae cursus mi hendrerit nec. Proin bibendum, augue faucibus tincidunt ultrices, tortor augue gravida lectus, et efficitur enim justo vel ligula.</p>
-								<div class="button cta_button"><div class="button_bcg"></div><a href="#">book now<span></span><span></span><span></span></a></div>
-							</div>
-							
 						</div>
-
-						<!-- CTA Slider Nav - Prev -->
-						<div class="cta_slider_nav cta_slider_prev">
-							<svg version="1.1" id="Layer_4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-								width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
-								<defs>
-									<linearGradient id='cta_grad_prev'>
-										<stop offset='0%' stop-color='#fa9e1b'/>
-										<stop offset='100%' stop-color='#8d4fff'/>
-									</linearGradient>
-								</defs>
-								<path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
-								M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
-								C22.545,2,26,5.541,26,9.909V23.091z"/>
-								<polygon class="nav_arrow" fill="#F3F6F9" points="15.044,22.222 16.377,20.888 12.374,16.885 16.377,12.882 15.044,11.55 9.708,16.885 11.04,18.219 
-								11.042,18.219 "/>
-							</svg>
-						</div>
-						
-						<!-- CTA Slider Nav - Next -->
-						<div class="cta_slider_nav cta_slider_next">
-							<svg version="1.1" id="Layer_5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
-								<defs>
-									<linearGradient id='cta_grad_next'>
-										<stop offset='0%' stop-color='#fa9e1b'/>
-										<stop offset='100%' stop-color='#8d4fff'/>
-									</linearGradient>
-								</defs>
-							<path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
-							M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
-							C22.545,2,26,5.541,26,9.909V23.091z"/>
-							<polygon class="nav_arrow" fill="#F3F6F9" points="13.044,11.551 11.71,12.885 15.714,16.888 11.71,20.891 13.044,22.224 18.379,16.888 17.048,15.554 
-							17.046,15.554 "/>
-							</svg>
-						</div>
-
 					</div>
 
 				</div>
 			</div>
 		</div>
-					
+
 	</div>
 
 	<!-- Offers -->
@@ -375,7 +351,7 @@
 							<div class="col-lg-6">
 								<div class="offers_image_container">
 									<div class="offers_image_background" style="background-image:url({{ offer.image.url }})"></div>
-									<div class="offer_name"><a href="{% url 'destination_detail' offer.destination.slug %}">{{ offer.destination.name }}</a></div>
+									<div class="offer_name"><a href="{% url 'offers' %}">{{ offer.destination.name }}</a></div>
 								</div>
 							</div>
 							<div class="col-lg-6">
@@ -399,7 +375,6 @@
 											<li class="offers_icons_item"><img src="{% static 'images/sailboat.png' %}" alt=""></li>
 										</ul>
 									</div>
-									<div class="offers_link"><a href="{% url 'offers' %}">read more</a></div>
 								</div>
 							</div>
 						</div>
@@ -410,96 +385,53 @@
 		</div>
 	</div>
 
-	<!-- Activities -->
+	<!-- Testimonials -->
 
 	<div class="testimonials">
 		<div class="test_border"></div>
 		<div class="container">
 			<div class="row">
 				<div class="col text-center">
-					<h2 class="section_title">Popular Activities</h2>
+					<h2 class="section_title">what our clients say about us</h2>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
-					
-					<!-- Activities Slider -->
+
+					<!-- Testimonials Slider -->
 
 					<div class="test_slider_container">
 						<div class="owl-carousel owl-theme test_slider">
-
-							{% for activity in activities %}
-							<!-- Activity Item -->
+							{% for testimonial in testimonials %}
+							<!-- Testimonial Item -->
 							<div class="owl-item">
 								<div class="test_item">
-									<div class="test_image"><img src="{{ activity.image.url }}" alt="{{ activity.title }}"></div>
-									<div class="test_icon"><img src="{% static 'images/compass.png' %}" alt=""></div>
+									<div class="test_image"><img src="{{ testimonial.client_photo.url }}" alt="{{ testimonial.client_name }}"></div>
+									<div class="test_icon"><img src="{% static 'images/backpack.png' %}" alt=""></div>
 									<div class="test_content_container">
 										<div class="test_content">
 											<div class="test_item_info">
-												<div class="test_name">{{ activity.title }}</div>
-												<div class="test_date">{{ activity.duration }}</div>
+												<div class="test_name">{{ testimonial.client_name }}</div>
+												<div class="test_date">{{ testimonial.date|date:"F d, Y" }}</div>
 											</div>
-											<div class="test_quote_title">${{ activity.price }}</div>
-											<p class="test_quote_text">{{ activity.description|truncatewords:20 }}</p>
-											<div class="rating_r rating_r_{{ activity.rating }}">
+											<div class="test_quote_title">" {{ testimonial.comment|truncatechars:100 }} "</div>
+											<div class="rating_r rating_r_{{ testimonial.rating }}">
 												{% for i in "12345"|make_list %}
-													{% if forloop.counter <= activity.rating %}
+													{% if forloop.counter <= testimonial.rating %}
 														<i class="fa fa-star"></i>
 													{% else %}
 														<i class="fa fa-star-o"></i>
 													{% endif %}
 												{% endfor %}
 											</div>
-											<div class="test_location">
-												<i class="fa fa-map-marker"></i> {{ activity.location }}
-											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 							{% endfor %}
-
 						</div>
-
-						<!-- Activities Slider Nav - Prev -->
-						<div class="test_slider_nav test_slider_prev">
-							<svg version="1.1" id="Layer_6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-								width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
-								<defs>
-									<linearGradient id='test_grad_prev'>
-										<stop offset='0%' stop-color='#fa9e1b'/>
-										<stop offset='100%' stop-color='#8d4fff'/>
-									</linearGradient>
-								</defs>
-								<path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
-								M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
-								C22.545,2,26,5.541,26,9.909V23.091z"/>
-								<polygon class="nav_arrow" fill="#F3F6F9" points="15.044,22.222 16.377,20.888 12.374,16.885 16.377,12.882 15.044,11.55 9.708,16.885 11.04,18.219 
-								11.042,18.219 "/>
-							</svg>
-						</div>
-						
-						<!-- Activities Slider Nav - Next -->
-						<div class="test_slider_nav test_slider_next">
-							<svg version="1.1" id="Layer_7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							width="28px" height="33px" viewBox="0 0 28 33" enable-background="new 0 0 28 33" xml:space="preserve">
-								<defs>
-									<linearGradient id='test_grad_next'>
-										<stop offset='0%' stop-color='#fa9e1b'/>
-										<stop offset='100%' stop-color='#8d4fff'/>
-									</linearGradient>
-								</defs>
-							<path class="nav_path" fill="#F3F6F9" d="M19,0H9C4.029,0,0,4.029,0,9v15c0,4.971,4.029,9,9,9h10c4.97,0,9-4.029,9-9V9C28,4.029,23.97,0,19,0z
-							M26,23.091C26,27.459,22.545,31,18.285,31H9.714C5.454,31,2,27.459,2,23.091V9.909C2,5.541,5.454,2,9.714,2h8.571
-							C22.545,2,26,5.541,26,9.909V23.091z"/>
-							<polygon class="nav_arrow" fill="#F3F6F9" points="13.044,11.551 11.71,12.885 15.714,16.888 11.71,20.891 13.044,22.224 18.379,16.888 17.048,15.554 
-							17.046,15.554 "/>
-							</svg>
-						</div>
-
 					</div>
-					
+
 				</div>
 			</div>
 
@@ -517,10 +449,10 @@
 				{% for place in trending_places %}
 				<!-- Trending Item -->
 				<div class="col-lg-3 col-sm-6">
-					<div class="trending_item clearfix">
+					<div class="trending_item clearfix" onclick="window.location.href='{% url 'offers' %}'" style="cursor: pointer;">
 						<div class="trending_image"><img src="{{ place.image.url }}" alt="{{ place.destination.name }}"></div>
 						<div class="trending_content">
-							<div class="trending_title"><a href="{% url 'destination_detail' place.destination.slug %}">{{ place.destination.name }}</a></div>
+							<div class="trending_title"><a href="{% url 'offers' %}">{{ place.destination.name }}</a></div>
 							<div class="trending_price">From ${{ place.price_from }}</div>
 							<div class="trending_location">{{ place.destination.city }}, {{ place.destination.country }}</div>
 						</div>
@@ -538,16 +470,15 @@
 			<div class="row">
 				<div class="col-lg-5">
 					<div class="contact_image">
-						
+
 					</div>
 				</div>
 				<div class="col-lg-7">
 					<div class="contact_form_container">
 						<div class="contact_title">get in touch</div>
-						<form id="contact_form" class="contact_form">
-							{% csrf_token %}
+						<form action="#" id="contact_form" class="contact_form">
 							<input type="text" id="contact_form_name" class="contact_form_name input_field" placeholder="Name" required="required" data-error="Name is required.">
-							<input type="email" id="contact_form_email" class="contact_form_email input_field" placeholder="E-mail" required="required" data-error="Email is required.">
+							<input type="text" id="contact_form_email" class="contact_form_email input_field" placeholder="E-mail" required="required" data-error="Email is required.">
 							<input type="text" id="contact_form_subject" class="contact_form_subject input_field" placeholder="Subject" required="required" data-error="Subject is required.">
 							<textarea id="contact_form_message" class="text_field contact_form_message" name="message" rows="4" placeholder="Message" required="required" data-error="Please, write us a message."></textarea>
 							<button type="submit" id="form_submit_button" class="form_submit_button button">send message<span></span><span></span><span></span></button>
@@ -571,7 +502,7 @@
 							<div class="logo_container footer_logo">
 								<div class="logo"><a href="#"><img src="{% static 'images/logo.png' %}" alt="">travelix</a></div>
 							</div>
-							<p class="footer_about_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis vu lputate eros, iaculis consequat nisl. Nunc et suscipit urna. Integer eleme ntum orci eu vehicula pretium.</p>
+							<p class="footer_about_text">Explore The Best Adventure Of A life Time, That You Will Never Forget</p>
 							<ul class="footer_social_list">
 								<li class="footer_social_item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
 								<li class="footer_social_item"><a href="#"><i class="fa fa-facebook-f"></i></a></li>
@@ -584,23 +515,23 @@
 				</div>
 
 				<!-- Footer Column -->
-				<div class="col-lg-3 footer_column">
+				{% comment %} <div class="col-lg-3 footer_column">
 					<div class="footer_col">
 						<div class="footer_title">blog posts</div>
 						<div class="footer_content footer_blog">
-							
+
 							<!-- Footer blog item -->
 							<div class="footer_blog_item clearfix">
-								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_1.jpg' %}" alt="https://unsplash.com/@avidenov"></div>
+								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_1.jpg' %}" alt="#"></div>
 								<div class="footer_blog_content">
 									<div class="footer_blog_title"><a href="{% url 'blog' %}">Travel with us this year</a></div>
 									<div class="footer_blog_date">Nov 29, 2017</div>
 								</div>
 							</div>
-							
+
 							<!-- Footer blog item -->
 							<div class="footer_blog_item clearfix">
-								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_2.jpg' %}" alt="https://unsplash.com/@deannaritchie"></div>
+								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_2.jpg' %}" alt="#"></div>
 								<div class="footer_blog_content">
 									<div class="footer_blog_title"><a href="{% url 'blog' %}">New destinations for you</a></div>
 									<div class="footer_blog_date">Nov 29, 2017</div>
@@ -609,7 +540,7 @@
 
 							<!-- Footer blog item -->
 							<div class="footer_blog_item clearfix">
-								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_3.jpg' %}" alt="https://unsplash.com/@bergeryap87"></div>
+								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_3.jpg' %}" alt="#"></div>
 								<div class="footer_blog_content">
 									<div class="footer_blog_title"><a href="{% url 'blog' %}">Travel with us this year</a></div>
 									<div class="footer_blog_date">Nov 29, 2017</div>
@@ -618,22 +549,19 @@
 
 						</div>
 					</div>
-				</div>
+				</div> {% endcomment %}
 
 				<!-- Footer Column -->
 				<div class="col-lg-3 footer_column">
 					<div class="footer_col">
-						<div class="footer_title">tags</div>
+						<div class="footer_title">		</div>
 						<div class="footer_content footer_tags">
-							<ul class="tags_list clearfix">
-								<li class="tag_item"><a href="#">design</a></li>
-								<li class="tag_item"><a href="#">fashion</a></li>
-								<li class="tag_item"><a href="#">music</a></li>
-								<li class="tag_item"><a href="#">video</a></li>
-								<li class="tag_item"><a href="#">party</a></li>
-								<li class="tag_item"><a href="#">photography</a></li>
-								<li class="tag_item"><a href="#">adventure</a></li>
-								<li class="tag_item"><a href="#">travel</a></li>
+							<ul class="tags_list">
+								<li><a href="#">     </a></li>
+								<li><a href="#">     </a></li>
+								<li><a href="#">		</a></li>
+								<li><a href="#">		</a></li>
+								<li><a href="#">		</a></li>
 							</ul>
 						</div>
 					</div>
@@ -645,22 +573,24 @@
 						<div class="footer_title">contact info</div>
 						<div class="footer_content footer_contact">
 							<ul class="contact_info_list">
+								{% if contact_info %}
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/placeholder.svg' %}" alt=""></div></div>
-									<div class="contact_info_text">4127 Raoul Wallenber 45b-c Gibraltar</div>
+									<div class="contact_info_text">{{ contact_info.address }}</div>
 								</li>
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/phone-call.svg' %}" alt=""></div></div>
-									<div class="contact_info_text">2556-808-8613</div>
+									<div class="contact_info_text">{{ contact_info.phone }}</div>
 								</li>
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/message.svg' %}" alt=""></div></div>
-									<div class="contact_info_text"><a href="mailto:contactme@gmail.com?Subject=Hello" target="_top">contactme@gmail.com</a></div>
+									<div class="contact_info_text"><a href="mailto:{{ contact_info.email }}?Subject=Hello" target="_top">{{ contact_info.email }}</a></div>
 								</li>
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/planet-earth.svg' %}" alt=""></div></div>
-									<div class="contact_info_text"><a href="#">McDtronix</a></div>
+									<div class="contact_info_text"><a href="{{ contact_info.website }}">{{ contact_info.website }}</a></div>
 								</li>
+								{% endif %}
 							</ul>
 						</div>
 					</div>
@@ -670,43 +600,53 @@
 		</div>
 	</footer>
 
-	<!-- Copyright -->
-
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 order-lg-1 order-2  ">
-					<div class="copyright_content d-flex flex-row align-items-center">
-						<div><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="#" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
-					</div>
-				</div>
-				<div class="col-lg-9 order-lg-2 order-1">
-					<div class="footer_nav_container d-flex flex-row align-items-center justify-content-lg-end">
-						<div class="footer_nav">
-							<ul class="footer_nav_list">
-								<li class="footer_nav_item"><a href="{% url 'index' %}">home</a></li>
-								<li class="footer_nav_item"><a href="{% url 'about' %}">about us</a></li>
-								<li class="footer_nav_item"><a href="{% url 'offers' %}">offers</a></li>
-								<li class="footer_nav_item"><a href="{% url 'blog' %}">news</a></li>
-								<li class="footer_nav_item"><a href="{% url 'contact' %}">contact</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</div>
-
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
 <script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
 <script src="{% static 'plugins/easing/easing.js' %}"></script>
 <script src="{% static 'js/custom.js' %}"></script>
+
+<script>
+$(document).ready(function() {
+    // Make only 'Book Now' buttons trigger the booking modal
+    $(document).on('click', '.cta_button a', function(e) {
+        e.preventDefault();
+        $('#bookingModal').modal('show');
+    });
+
+    $('#bookingForm').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    $('#booking-messages').html('<div class="alert alert-success">' + response.message + '</div>');
+                    $('#bookingForm')[0].reset();
+                    setTimeout(function() {
+                        $('#bookingModal').modal('hide');
+                    }, 2000);
+                } else {
+                    $('#booking-messages').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    // Display field-specific errors
+                    if (response.errors) {
+                        for (var field in response.errors) {
+                            $('#' + field + '-error').html(response.errors[field].join('<br>'));
+                        }
+                    }
+                }
+            },
+            error: function() {
+                $('#booking-messages').html('<div class="alert alert-danger">An error occurred. Please try again.</div>');
+            }
+        });
+    });
+});
+</script>
+
 
 </body>
 

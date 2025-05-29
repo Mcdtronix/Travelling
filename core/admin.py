@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.utils.text import slugify
 from .models import (
-    SearchCategory,
     Destination,
     Booking,
     FeaturedDestination,
@@ -15,30 +14,24 @@ from .models import (
     Listing
 )
 
-@admin.register(SearchCategory)
-class SearchCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'icon', 'order', 'is_active')
-    list_filter = ('is_active',)
-    search_fields = ('name',)
-    ordering = ('order',)
-
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
     list_display = ('name', 'country', 'base_price', 'rating', 'slug')
     list_filter = ('country', 'rating')
     search_fields = ('name', 'country', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    
+
     def save_model(self, request, obj, form, change):
         if not obj.slug:
             obj.slug = slugify(obj.name)
         super().save_model(request, obj, form, change)
 
+
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('destination', 'category', 'check_in_date', 'check_out_date', 'adults', 'children')
-    list_filter = ('category', 'check_in_date', 'destination')
-    search_fields = ('destination__name', 'category__name')
+    list_display = ('destination', 'check_in_date', 'check_out_date', 'adults', 'children')
+    list_filter = ('check_in_date', 'destination')
+    search_fields = ('destination__name',)
     date_hierarchy = 'check_in_date'
 
 @admin.register(FeaturedDestination)
@@ -81,7 +74,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ('phone', 'email', 'address')
-    
+
     def has_add_permission(self, request):
         # Only allow one ContactInfo instance
         if self.model.objects.exists():

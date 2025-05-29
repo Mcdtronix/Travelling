@@ -16,7 +16,7 @@
 <body>
 
 <div class="super_container">
-	
+
 	<!-- Header -->
 
 	<header class="header">
@@ -27,32 +27,24 @@
 			<div class="container">
 				<div class="row">
 					<div class="col d-flex flex-row">
-						{% if contact_info %}
-						<div class="phone">{{ contact_info.phone }}</div>
+						<div class="phone">+45 345 3324 56789</div>
 						<div class="social">
 							<ul class="social_list">
-								{% if contact_info.pinterest %}
-								<li class="social_list_item"><a href="{{ contact_info.pinterest }}"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-								{% endif %}
-								{% if contact_info.facebook %}
-								<li class="social_list_item"><a href="{{ contact_info.facebook }}"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-								{% endif %}
-								{% if contact_info.twitter %}
-								<li class="social_list_item"><a href="{{ contact_info.twitter }}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-								{% endif %}
-								{% if contact_info.instagram %}
-								<li class="social_list_item"><a href="{{ contact_info.instagram }}"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-								{% endif %}
+								<li class="social_list_item"><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+								<li class="social_list_item"><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								<li class="social_list_item"><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+								<li class="social_list_item"><a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+								<li class="social_list_item"><a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a></li>
+								<li class="social_list_item"><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
 							</ul>
 						</div>
-						{% endif %}
-						<div class="user_box ml-auto">
-							<div class="user_box_login user_box_link"><a href="#">login</a></div>
-							<div class="user_box_register user_box_link"><a href="#">register</a></div>
-						</div>
+						<!--<div class="user_box ml-auto">-->
+						<!--	<div class="user_box_login user_box_link"><a href="#">login</a></div>-->
+						<!--	<div class="user_box_register user_box_link"><a href="#">register</a></div>-->
+						<!--</div>-->
 					</div>
 				</div>
-			</div>		
+			</div>
 		</div>
 
 		<!-- Main Navigation -->
@@ -69,7 +61,6 @@
 								<li class="main_nav_item"><a href="{% url 'index' %}">home</a></li>
 								<li class="main_nav_item"><a href="{% url 'about' %}">about us</a></li>
 								<li class="main_nav_item"><a href="{% url 'offers' %}">offers</a></li>
-								<li class="main_nav_item"><a href="{% url 'blog' %}">news</a></li>
 								<li class="main_nav_item"><a href="{% url 'contact' %}">contact</a></li>
 							</ul>
 						</div>
@@ -100,13 +91,13 @@
 						<form id="search_form" class="search_form bez_1">
 							<input type="search" class="search_content_input bez_1">
 						</form>
-						
+
 						<div class="hamburger">
 							<i class="fa fa-bars trans_200"></i>
 						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</nav>
 
 	</header>
@@ -119,7 +110,6 @@
 				<li class="menu_item"><a href="{% url 'index' %}">home</a></li>
 				<li class="menu_item"><a href="{% url 'about' %}">about us</a></li>
 				<li class="menu_item"><a href="{% url 'offers' %}">offers</a></li>
-				<li class="menu_item"><a href="{% url 'blog' %}">news</a></li>
 				<li class="menu_item"><a href="{% url 'contact' %}">contact</a></li>
 			</ul>
 		</div>
@@ -163,7 +153,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-5">
-					
+
 					<!-- About - Image -->
 
 					<div class="about_image">
@@ -173,14 +163,14 @@
 				</div>
 
 				<div class="col-lg-4">
-					
+
 					<!-- About - Content -->
 
 					<div class="about_content">
 						<div class="logo_container about_logo">
 							<div class="logo"><a href="#"><img src="{% static 'images/logo.png' %}" alt="">travelix</a></div>
 						</div>
-						<p class="about_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis vu lputate eros, iaculis consequat nisl. Nunc et suscipit urna. Integer eleme ntum orci eu vehicula iaculis consequat nisl. Nunc et suscipit urna pretium.</p>
+						<p class="about_text">Explore The Best Adventure Of A life Time, That You Will Never Forget</p>
 						<ul class="about_social_list">
 							<li class="about_social_item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
 							<li class="about_social_item"><a href="#"><i class="fa fa-facebook-f"></i></a></li>
@@ -193,28 +183,30 @@
 				</div>
 
 				<div class="col-lg-3">
-					
+
 					<!-- About Info -->
 
 					<div class="about_info">
 						<ul class="contact_info_list">
-							<li class="contact_info_item d-flex flex-row">
-								<div><div class="contact_info_icon"><img src="{% static 'images/placeholder.svg' %}" alt=""></div></div>
-								<div class="contact_info_text">4127 Raoul Wallenber 45b-c Gibraltar</div>
-							</li>
-							<li class="contact_info_item d-flex flex-row">
-								<div><div class="contact_info_icon"><img src="{% static 'images/phone-call.svg' %}" alt=""></div></div>
-								<div class="contact_info_text">2556-808-8613</div>
-							</li>
-							<li class="contact_info_item d-flex flex-row">
-								<div><div class="contact_info_icon"><img src="{% static 'images/message.svg' %}" alt=""></div></div>
-								<div class="contact_info_text"><a href="{% static 'mailto:contactme@gmail.com?Subject=Hello' %}" target="_top">contactme@gmail.com</a></div>
-							</li>
-							<li class="contact_info_item d-flex flex-row">
-								<div><div class="contact_info_icon"><img src="{% static 'images/planet-earth.svg' %}" alt=""></div></div>
-								<div class="contact_info_text"><a href="https://example.com">www.example.com</a></div>
-							</li>
-						</ul>
+								{% if contact_info %}
+								<li class="contact_info_item d-flex flex-row">
+									<div><div class="contact_info_icon"><img src="{% static 'images/placeholder.svg' %}" alt=""></div></div>
+									<div class="contact_info_text">{{ contact_info.address }}</div>
+								</li>
+								<li class="contact_info_item d-flex flex-row">
+									<div><div class="contact_info_icon"><img src="{% static 'images/phone-call.svg' %}" alt=""></div></div>
+									<div class="contact_info_text">{{ contact_info.phone }}</div>
+								</li>
+								<li class="contact_info_item d-flex flex-row">
+									<div><div class="contact_info_icon"><img src="{% static 'images/message.svg' %}" alt=""></div></div>
+									<div class="contact_info_text"><a href="mailto:{{ contact_info.email }}?Subject=Hello" target="_top">{{ contact_info.email }}</a></div>
+								</li>
+								<li class="contact_info_item d-flex flex-row">
+									<div><div class="contact_info_icon"><img src="{% static 'images/planet-earth.svg' %}" alt=""></div></div>
+									<div class="contact_info_text"><a href="{{ contact_info.website }}">{{ contact_info.website }}</a></div>
+								</li>
+								{% endif %}
+							</ul>
 					</div>
 
 				</div>
@@ -224,7 +216,7 @@
 	</div>
 
 	<!-- Google Map -->
-		
+
 	<div class="travelix_map">
 		<div id="google_map" class="google_map">
 			<div class="map_container">
@@ -246,7 +238,7 @@
 							<div class="logo_container footer_logo">
 								<div class="logo"><a href="#"><img src="{% static 'images/logo.png' %}" alt="">travelix</a></div>
 							</div>
-							<p class="footer_about_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis vu lputate eros, iaculis consequat nisl. Nunc et suscipit urna. Integer eleme ntum orci eu vehicula pretium.</p>
+							<p class="footer_about_text">Explore The Best Adventure Of A life Time, That You Will Never Forget</p>
 							<ul class="footer_social_list">
 								<li class="footer_social_item"><a href="#"><i class="fa fa-pinterest"></i></a></li>
 								<li class="footer_social_item"><a href="#"><i class="fa fa-facebook-f"></i></a></li>
@@ -259,41 +251,41 @@
 				</div>
 
 				<!-- Footer Column -->
-				<div class="col-lg-3 footer_column">
+				{% comment %} <div class="col-lg-3 footer_column">
 					<div class="footer_col">
 						<div class="footer_title">blog posts</div>
 						<div class="footer_content footer_blog">
-							
+
 							<!-- Footer blog item -->
 							<div class="footer_blog_item clearfix">
-								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_1.jpg' %}" alt="https://unsplash.com/@avidenov"></div>
+								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_1.jpg' %}" alt="#"></div>
 								<div class="footer_blog_content">
-									<div class="footer_blog_title"><a href="{% static 'blog.html' %}">Travel with us this year</a></div>
-									<div class="footer_blog_date">Nov 29, 2017</div>
-								</div>
-							</div>
-							
-							<!-- Footer blog item -->
-							<div class="footer_blog_item clearfix">
-								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_2.jpg' %}" alt="https://unsplash.com/@deannaritchie"></div>
-								<div class="footer_blog_content">
-									<div class="footer_blog_title"><a href="{% static 'blog.html' %}">New destinations for you</a></div>
+									<div class="footer_blog_title"><a href="{% url 'blog' %}">Travel with us this year</a></div>
 									<div class="footer_blog_date">Nov 29, 2017</div>
 								</div>
 							</div>
 
 							<!-- Footer blog item -->
 							<div class="footer_blog_item clearfix">
-								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_3.jpg' %}" alt="https://unsplash.com/@bergeryap87"></div>
+								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_2.jpg' %}" alt="#"></div>
 								<div class="footer_blog_content">
-									<div class="footer_blog_title"><a href="{% static 'blog.html' %}">Travel with us this year</a></div>
+									<div class="footer_blog_title"><a href="{% url 'blog' %}">New destinations for you</a></div>
+									<div class="footer_blog_date">Nov 29, 2017</div>
+								</div>
+							</div>
+
+							<!-- Footer blog item -->
+							<div class="footer_blog_item clearfix">
+								<div class="footer_blog_image"><img src="{% static 'images/footer_blog_3.jpg' %}" alt="#"></div>
+								<div class="footer_blog_content">
+									<div class="footer_blog_title"><a href="{% url 'blog' %}">Travel with us this year</a></div>
 									<div class="footer_blog_date">Nov 29, 2017</div>
 								</div>
 							</div>
 
 						</div>
 					</div>
-				</div>
+				</div> {% endcomment %}
 
 				<!-- Footer Column -->
 				<div class="col-lg-3 footer_column">
@@ -301,9 +293,6 @@
 						<div class="footer_title">tags</div>
 						<div class="footer_content footer_tags">
 							<ul class="tags_list clearfix">
-								<li class="tag_item"><a href="#">design</a></li>
-								<li class="tag_item"><a href="#">fashion</a></li>
-								<li class="tag_item"><a href="#">music</a></li>
 								<li class="tag_item"><a href="#">video</a></li>
 								<li class="tag_item"><a href="#">party</a></li>
 								<li class="tag_item"><a href="#">photography</a></li>
@@ -320,22 +309,24 @@
 						<div class="footer_title">contact info</div>
 						<div class="footer_content footer_contact">
 							<ul class="contact_info_list">
+								{% if contact_info %}
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/placeholder.svg' %}" alt=""></div></div>
-									<div class="contact_info_text">4127 Raoul Wallenber 45b-c Gibraltar</div>
+									<div class="contact_info_text">{{ contact_info.address }}</div>
 								</li>
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/phone-call.svg' %}" alt=""></div></div>
-									<div class="contact_info_text">2556-808-8613</div>
+									<div class="contact_info_text">{{ contact_info.phone }}</div>
 								</li>
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/message.svg' %}" alt=""></div></div>
-									<div class="contact_info_text"><a href="{% static 'mailto:contactme@gmail.com?Subject=Hello' %}" target="_top">contactme@gmail.com</a></div>
+									<div class="contact_info_text"><a href="mailto:{{ contact_info.email }}?Subject=Hello" target="_top">{{ contact_info.email }}</a></div>
 								</li>
 								<li class="contact_info_item d-flex flex-row">
 									<div><div class="contact_info_icon"><img src="{% static 'images/planet-earth.svg' %}" alt=""></div></div>
-									<div class="contact_info_text"><a href="https://example.com">www.example.com</a></div>
+									<div class="contact_info_text"><a href="{{ contact_info.website }}">{{ contact_info.website }}</a></div>
 								</li>
+								{% endif %}
 							</ul>
 						</div>
 					</div>
@@ -344,37 +335,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<!-- Copyright -->
-
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 order-lg-1 order-2  ">
-					<div class="copyright_content d-flex flex-row align-items-center">
-						<div><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://example.com" target="_blank">Example</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
-					</div>
-				</div>
-				<div class="col-lg-9 order-lg-2 order-1">
-					<div class="footer_nav_container d-flex flex-row align-items-center justify-content-lg-end">
-						<div class="footer_nav">
-							<ul class="footer_nav_list">
-								<li class="footer_nav_item"><a href="{% static 'index.html' %}">home</a></li>
-								<li class="footer_nav_item"><a href="{% static 'about.html' %}">about us</a></li>
-								<li class="footer_nav_item"><a href="{% static 'offers.html' %}">offers</a></li>
-								<li class="footer_nav_item"><a href="{% static 'blog.html' %}">news</a></li>
-								<li class="footer_nav_item"><a href="{% static 'contact.html' %}">contact</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</div>
 
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
